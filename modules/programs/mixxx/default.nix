@@ -20,7 +20,7 @@ let
     mkdir -p "$HOME/.mixxx"
     rm -f "$HOME/.mixxx/soundconfig.xml"
     ln -sf "${mixxxConfig}" "$HOME/.mixxx/mixxx.cfg"
-    exec ${pkgs.mixxx}/bin/mixxx -f --settingsPath "$HOME/.mixxx" "$@"
+    exec ${pkgs.mixxx}/bin/mixxx --settingsPath "$HOME/.mixxx" "$@"
   '';
 in {
   options.rofa.programs.mixxx = {
