@@ -1,0 +1,18 @@
+diff --git a/src/library/browse/browsefeature.cpp b/src/library/browse/browsefeature.cpp
+index 71c8778..d9c78f7 100644
+--- a/src/library/browse/browsefeature.cpp
++++ b/src/library/browse/browsefeature.cpp
+@@ -76,8 +76,12 @@ BrowseFeature::BrowseFeature(QObject* parent,
+         tr("Devices"), "/Volumes/", this, rootItem);
+     rootItem->appendChild(devices_link);
+ #else  // LINUX
++    const char *username = getenv("USER");
++    QString mediaPath = username == NULL ?
++        QString("/media/") : QString("/run/media/") + username + "/";
++
+     TreeItem* devices_link = new TreeItem(
+-        tr("Removable Devices"), "/media/", this, rootItem);
++        tr("Removable Devices"), mediaPath, this, rootItem);
+     rootItem->appendChild(devices_link);
+ 
+     // show root directory on UNIX-based operating systems

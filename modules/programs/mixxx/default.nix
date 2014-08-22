@@ -45,6 +45,7 @@ in {
           "-I${opkgs.mp4v2}/include" "-L${opkgs.mp4v2}/lib"
           "-I${opkgs.faad2}/include" "-L${opkgs.faad2}/lib"
         ];
+        patches = (o.patches or []) ++ [ ./patches/udisks.patch ];
         sconsFlags = o.sconsFlags ++ [ "faad=1" "optimize=8" ];
       });
     };
