@@ -34,6 +34,8 @@ in {
       '';
     }) pkgs.linuxPackages_latest;
 
+    boot.loader.grub.timeout = 0;
+
     i18n = {
       consoleFont = "lat9w-16";
       consoleKeyMap = "de";
