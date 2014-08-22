@@ -68,6 +68,10 @@ in {
     services.xserver.displayManager.auto.user = cfg.mainUser;
     services.xserver.desktopManager.kde4.enable = true;
 
+    services.xserver.displayManager.sessionCommands = ''
+      mixxx
+    '';
+
     nixpkgs.config.pulseaudio = false;
 
     nixpkgs.config.packageOverrides = opkgs: rec {
