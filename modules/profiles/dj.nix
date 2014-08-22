@@ -101,6 +101,8 @@ in {
         LimitRTTIME = "infinity";
         LimitMEMLOCK = "infinity";
       };
+
+      restartIfChanged = false;
     };
 
     services.udev.extraRules = ''
