@@ -17,6 +17,7 @@ let
 
   runMixxx = pkgs.writeScriptBin "mixxx" ''
     #!${pkgs.stdenv.shell}
+    mkdir -p "$HOME/.mixxx"
     ln -sf "${soundConfig}" "$HOME/.mixxx/soundconfig.xml"
     ln -sf "${mixxxConfig}" "$HOME/.mixxx/mixxx.cfg"
     exec ${pkgs.mixxx}/bin/mixxx -f --settingsPath "$HOME/.mixxx" "$@"
