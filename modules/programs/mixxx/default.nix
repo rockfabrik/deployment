@@ -9,7 +9,7 @@ let
     name = "mixxx.cfg";
     src = ./mixxx.cfg;
     inherit (pkgs) mixxx;
-    playlistDir = "/home/${cfg.djUser}";
+    playlistDir = "/music";
     recordingsDir = "/home/${cfg.djUser}/Mixxx/Recordings";
   };
 
