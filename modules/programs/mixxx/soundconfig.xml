@@ -1,0 +1,10 @@
+<!DOCTYPE SoundManagerConfig>
+<SoundManagerConfig latency="5" api="JACK Audio Connection Kit"
+                    samplerate="48000">
+  <SoundDevice name="imic1">
+    <output channel="0" type="Deck" index="0"/>
+  </SoundDevice>
+  <SoundDevice name="imic2">
+    <output channel="0" type="Deck" index="1"/>
+  </SoundDevice>
+</SoundManagerConfig>
