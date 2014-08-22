@@ -26,6 +26,12 @@
     device = "/dev/disk/by-uuid/58376c8d-5193-4bdd-aa30-4fefdb706733";
   };
 
+  fileSystems."/music" = {
+    device = "192.168.2.120:/mnt/HD/HD_a2/music";
+    fsType = "nfs";
+    options = "ro";
+  };
+
   services.xserver.videoDrivers = [ "nouveau" ];
 
   nix.maxJobs = 2;
