@@ -69,7 +69,7 @@ in {
     services.xserver.desktopManager.kde4.enable = true;
 
     services.xserver.displayManager.sessionCommands = ''
-      mixxx
+      mixxx &
     '';
 
     nixpkgs.config.pulseaudio = false;
