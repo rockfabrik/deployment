@@ -1,0 +1,26 @@
+diff --git a/src/soundmanagerconfig.cpp b/src/soundmanagerconfig.cpp
+index 1f5129a..5e53d06 100644
+--- a/src/soundmanagerconfig.cpp
++++ b/src/soundmanagerconfig.cpp
+@@ -327,10 +327,17 @@ void SoundManagerConfig::loadDefaults(SoundManager *soundManager, unsigned int f
+                 if (device->getNumOutputChannels() < 2) {
+                     continue;
+                 }
+-                AudioOutput masterOut(AudioPath::MASTER, 0);
+-                addOutput(device->getInternalName(), masterOut);
+-                defaultSampleRate = device->getDefaultSampleRate();
+-                break;
++                if (device->getDisplayName() == "imic1") {
++                    AudioOutput leftOut(AudioPath::DECK, 0, 0);
++                    addOutput(device->getInternalName(), leftOut);
++                } else if (device->getDisplayName() == "imic2") {
++                    AudioOutput rightOut(AudioPath::DECK, 0, 1);
++                    addOutput(device->getInternalName(), rightOut);
++                } else {
++                    AudioOutput masterOut(AudioPath::MASTER, 0);
++                    addOutput(device->getInternalName(), masterOut);
++                    defaultSampleRate = device->getDefaultSampleRate();
++                }
+             }
+         }
+     }

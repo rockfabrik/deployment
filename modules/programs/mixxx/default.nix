@@ -18,7 +18,7 @@ let
   runMixxx = pkgs.writeScriptBin "mixxx" ''
     #!${pkgs.stdenv.shell}
     mkdir -p "$HOME/.mixxx"
-    ln -sf "${soundConfig}" "$HOME/.mixxx/soundconfig.xml"
+    rm -f "$HOME/.mixxx/soundconfig.xml"
     ln -sf "${mixxxConfig}" "$HOME/.mixxx/mixxx.cfg"
     exec ${pkgs.mixxx}/bin/mixxx -f --settingsPath "$HOME/.mixxx" "$@"
   '';
@@ -45,7 +45,10 @@ in {
           "-I${opkgs.mp4v2}/include" "-L${opkgs.mp4v2}/lib"
           "-I${opkgs.faad2}/include" "-L${opkgs.faad2}/lib"
         ];
-        patches = (o.patches or []) ++ [ ./patches/udisks.patch ];
+        patches = (o.patches or []) ++ [
+          ./patches/udisks.patch
+          ./patches/imic.patch
+        ];
         sconsFlags = o.sconsFlags ++ [ "faad=1" "optimize=8" ];
       });
     };
