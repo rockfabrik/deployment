@@ -29,7 +29,7 @@
   fileSystems."/music" = {
     device = "192.168.2.120:/mnt/HD/HD_a2/music";
     fsType = "nfs";
-    options = "ro";
+    options = "ro,x-systemd.automount";
   };
 
   services.xserver.videoDrivers = [ "nouveau" ];
