@@ -61,7 +61,7 @@ in {
     environment.systemPackages = let
       startAndPromptShutdown = pkgs.writeScript "mixxx-autostart.sh" ''
         ${pkgs.stdenv.shell} -e
-        ${pkgs.mixxxWrapper}/bin/mixxx
+        ${pkgs.mixxxWrapper}/bin/mixxx -f
         qdbus org.kde.ksmserver /KSMServer \
           org.kde.KSMServerInterface.logout 2 2 4
       '';
