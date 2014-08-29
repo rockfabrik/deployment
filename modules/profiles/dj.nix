@@ -130,7 +130,10 @@ in {
       serviceConfig = {
         User = cfg.mainUser;
         Group = "audio";
-        ExecStart = "${pkgs.jack2}/bin/alsa_out -j imic%I -d hw:%I";
+        ExecStart = let
+          amixerCmd = "${pkgs.alsaUtils}/bin/amixer -c%I sset PCM 100%";
+          jackCmd = "${pkgs.jack2}/bin/alsa_out -j imic%I -d hw:%I";
+        in "${pkgs.stdenv.shell} -c '${amixerCmd}; ${jackCmd}'";
         LimitRTPRIO = "infinity";
         LimitRTTIME = "infinity";
         LimitMEMLOCK = "infinity";
