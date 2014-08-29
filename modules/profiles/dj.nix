@@ -58,7 +58,16 @@ in {
 
     users.mutableUsers = false;
 
-    environment.systemPackages = [ pkgs.qjackctl ];
+    environment.systemPackages = let
+      mixxxAutoStart = pkgs.stdenv.mkDerivation {
+        name = "mixxx-autostart";
+        buildCommand = ''
+          mkdir -p "$out/share/autostart"
+          ln -s "${pkgs.mixxxWrapper}/share/applications/mixxx.desktop" \
+                "$out/share/autostart/mixxx.desktop"
+        '';
+      };
+    in [ mixxxAutoStart pkgs.qjackctl ];
 
     services.xserver.enable = true;
     services.xserver.layout = "de";
@@ -67,10 +76,6 @@ in {
     services.xserver.displayManager.auto.enable = true;
     services.xserver.displayManager.auto.user = cfg.mainUser;
     services.xserver.desktopManager.kde4.enable = true;
-
-    services.xserver.displayManager.sessionCommands = ''
-      mixxx &
-    '';
 
     nixpkgs.config.pulseaudio = false;
 

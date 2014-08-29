@@ -15,13 +15,25 @@ let
 
   soundConfig = ./soundconfig.xml;
 
-  runMixxx = pkgs.writeScriptBin "mixxx" ''
+  runMixxx = pkgs.writeScript "mixxx.sh" ''
     #!${pkgs.stdenv.shell}
     mkdir -p "$HOME/.mixxx"
     rm -f "$HOME/.mixxx/soundconfig.xml"
     ln -sf "${mixxxConfig}" "$HOME/.mixxx/mixxx.cfg"
     exec ${pkgs.mixxx}/bin/mixxx --settingsPath "$HOME/.mixxx" "$@"
   '';
+
+  mixxxWrapper = pkgs.stdenv.mkDerivation {
+    name = "mixxx-wrapper-${pkgs.mixxx.version}";
+    buildCommand = ''
+      mkdir -p "$out/bin" "$out/share/applications" "$out/share/autostart"
+      ln -s "${runMixxx}" "$out/bin/mixxx"
+      sed -e '/^[Ee]xec *=/c Exec='"$out/bin/mixxx" \
+          -e '/^[Ii]con *=/c Icon=${pkgs.mixxx}/share/pixmaps/mixxx-icon.png' \
+          "${pkgs.mixxx}/share/applications/mixxx.desktop" \
+          > "$out/share/applications/mixxx.desktop"
+    '';
+  };
 in {
   options.rofa.programs.mixxx = {
     enable = mkEnableOption "Mixxx DJ Software";
@@ -37,9 +49,11 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ runMixxx ];
+    environment.systemPackages = [ pkgs.mixxxWrapper ];
 
     nixpkgs.config.packageOverrides = opkgs: {
+      inherit mixxxWrapper;
+
       mixxx = overrideDerivation opkgs.mixxx (o: {
         NIX_CFLAGS_COMPILE = [
           "-I${opkgs.mp4v2}/include" "-L${opkgs.mp4v2}/lib"
