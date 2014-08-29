@@ -59,12 +59,19 @@ in {
     users.mutableUsers = false;
 
     environment.systemPackages = let
+      startAndPromptShutdown = pkgs.writeScript "mixxx-autostart.sh" ''
+        ${pkgs.stdenv.shell} -e
+        ${pkgs.mixxxWrapper}/bin/mixxx
+        qdbus org.kde.ksmserver /KSMServer \
+          org.kde.KSMServerInterface.logout 2 2 4
+      '';
       mixxxAutoStart = pkgs.stdenv.mkDerivation {
         name = "mixxx-autostart";
         buildCommand = ''
           mkdir -p "$out/share/autostart"
-          ln -s "${pkgs.mixxxWrapper}/share/applications/mixxx.desktop" \
-                "$out/share/autostart/mixxx.desktop"
+          sed -e '/^[Ee]xec *=/c Exec=${startAndPromptShutdown}' \
+            "${pkgs.mixxxWrapper}/share/applications/mixxx.desktop" \
+            > "$out/share/autostart/mixxx.desktop"
         '';
       };
     in [ mixxxAutoStart pkgs.qjackctl ];
