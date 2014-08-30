@@ -9,7 +9,7 @@ let
     name = "mixxx.cfg";
     src = ./mixxx.cfg;
     inherit (pkgs) mixxx;
-    playlistDir = "/music";
+    inherit (cfg) reindexOnLaunch playlistDir;
     recordingsDir = "/home/${cfg.djUser}/Mixxx/Recordings";
   };
 
@@ -44,6 +44,27 @@ in {
       description = ''
         The username which is the main DJ user and has access to the
         sound devices and a specialized jackd service.
+      '';
+    };
+
+    reindexOnLaunch = mkOption {
+      default = false;
+      example = true;
+      type = types.bool;
+      description = ''
+        Whether to search for new music files on startup.
+      '';
+      apply = opt: if opt then "1" else "0";
+    };
+
+    playlistDir = mkOption {
+      default = "/home/${cfg.djUser}/Music";
+      example = "/music";
+      type = types.path;
+      description = ''
+        The directory which contains all music searchable inside the librarp.
+        Affected by option <option>reindexOnLaunch</option> in the way that it
+        is the directory which is indexed on startup.
       '';
     };
   };
