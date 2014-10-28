@@ -15,24 +15,34 @@ in {
         The main user on this system, which is to be logged in automatically.
       '';
     };
+
+    enableRealtimeKernel = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        Whether to optimize for a realtime kernel whenever possible.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
     rofa.programs.mixxx.enable = true;
     rofa.programs.mixxx.djUser = cfg.mainUser;
 
-    boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_latest.override {
-      extraConfig = ''
-        PREEMPT_RT_FULL? y
-        PREEMPT y
-        IOSCHED_DEADLINE y
-        DEFAULT_DEADLINE y
-        DEFAULT_IOSCHED "deadline"
-        HPET_TIMER y
-        CPU_FREQ n
-        TREE_RCU_TRACE n
-      '';
-    }) pkgs.linuxPackages_latest;
+    boot.kernelPackages = let
+      rtKernel = pkgs.linuxPackagesFor (pkgs.linux_latest.override {
+        extraConfig = ''
+          PREEMPT_RT_FULL? y
+          PREEMPT y
+          IOSCHED_DEADLINE y
+          DEFAULT_DEADLINE y
+          DEFAULT_IOSCHED "deadline"
+          HPET_TIMER y
+          CPU_FREQ n
+          TREE_RCU_TRACE n
+        '';
+      }) pkgs.linuxPackages_latest;
+    in mkIf cfg.enableRealtimeKernel rtKernel;
 
     boot.loader.grub.timeout = 0;
 
