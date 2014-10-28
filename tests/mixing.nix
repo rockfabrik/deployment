@@ -22,7 +22,7 @@ let
   };
 
 in {
-  name = "audio";
+  name = "mixing";
 
   machine = {
     imports = [ ../common.nix ];
